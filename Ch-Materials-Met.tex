@@ -1,44 +1,47 @@
 \subsection{Base de datos}
-Para realizar este trabajo se utilizó un dataset de dominio público obtenido a partir del estudio 
-Consortium for Neuropsychiatry Phenomics (CNP), el cual fue fundado por NIH Roadmap Initiative. 
-De aquí se tomó una muestra imagénes de resonancia magnética mediante las siguientes técnicas: 
-a) MRI ponderadas en T1 con el método MPRAGE ya que permite que se resalten los contrastes entre los tejidos, 
-por lo que se utilizó para la segmentación y análisis de la anatomía y 
-b) 64 Direction DWI (difusión ponderada en 64 direcciones, se usa para medir ladifusión del agua 
-en los tejidos cerebrales). \cite{bilder2020ucla}
-\\
-Los pacientes analizados tenían entre 21-50 años de edad, todos de Los Ángeles y tenían que cumplir 
-con los criterios de ser blancos, no hispanos ni latinos. Previamente se los escaneó para constatar 
-que no padecieran enfermedades neurológicas, que no tomaran medicación y que no tengan historial de 
+Para realizar este trabajo se utilizó un dataset de dominio público obtenido a partir del estudio
+Consortium for Neuropsychiatry Phenomics (CNP), el cual fue fundado por NIH Roadmap Initiative.
+De aquí se tomó una muestra imagénes de resonancia magnética mediante las siguientes técnicas:
+\begin{enumerate}[label=\alph*)]
+    \item MRI ponderadas en T1 con el método MPRAGE ya que permite que se resalten los contrastes entre los tejidos,
+          por lo que se utilizó para la segmentación y análisis de la anatomía y
+    \item 64 Direction DWI (difusión ponderada en 64 direcciones, se usa para medir la difusión del agua
+          en los tejidos cerebrales).
+          \cite{bilder2020ucla}
+\end{enumerate}
+
+Los pacientes analizados tenían entre 21-50 años de edad, todos de Los Ángeles y tenían que cumplir
+con los criterios de ser blancos, no hispanos ni latinos. Previamente se los escaneó para constatar
+que no padecieran enfermedades neurológicas, que no tomaran medicación y que no tengan historial de
 otras enfermedades mentales graves, ADHD ni ningún trastorno de ánimo ni ansiedad. \\
 Para este trabajo en específico se eligieron 58 sujetos sanos y 58 sujetos con esquizofrenia diagnosticada.
 
 \subsection{Preprocesamiento y procesamiento de imágenes}
-Una vez escogidas las imágenes se realizó un preprocesamiento mediante el software FSL con el objetivo de 
-corregir movimientos, distorsión, eliminar ruidos y segmentar tejidos para poder así separar las regiones 
+Una vez escogidas las imágenes se realizó un preprocesamiento mediante el software FSL con el objetivo de
+corregir movimientos, distorsión, eliminar ruidos y segmentar tejidos para poder así separar las regiones
 de interés (ROI) y mejorar la precisión de las tractografías y mediciones.\\
-Luego se procedió a procesar las imágenes mediante el programa DSI Studio para extraer características 
-tractgráficas. Puntualmente se evaluó la longitud, la fracción de anisotropía, la curvatura y el volumen 
+Luego se procedió a procesar las imágenes mediante el programa DSI Studio para extraer características
+tractgráficas. Puntualmente se evaluó la longitud, la fracción de anisotropía, la curvatura y el volumen
 de los tractos. \\
-Todos estos datos obtenidos se utilizaron como inputs para el análisis de las imágenes mediante redes 
-neuronales convolucionales.  
+Todos estos datos obtenidos se utilizaron como inputs para el análisis de las imágenes mediante redes
+neuronales convolucionales.
 
 \subsection{Entrenamiento de la CNN}
-Primero se definió la arquitectura de la red neuronal con X cantidad de capas convolucionales, X capas de 
-agrupación, X capas de normalización. Posterior a esto se compiló la CNN para definir la función de pérdida, 
-el optimizador y las métricas de evaluación. Una vez definido todo esto se procedió a entrenar a la CNN: 
+Primero se definió la arquitectura de la red neuronal con X cantidad de capas convolucionales, X capas de
+agrupación, X capas de normalización. Posterior a esto se compiló la CNN para definir la función de pérdida,
+el optimizador y las métricas de evaluación. Una vez definido todo esto se procedió a entrenar a la CNN:
 se ingresaron los inputs. \\
-Se utilizó una fórmula de regresión logística para definir cada nodo (1). El nodo (y) es el resultado de 
-multiplicar el peso (w) por un set de variables independientes (x), a eso se le sumó un bias. Luego a ese 
+Se utilizó una fórmula de regresión logística para definir cada nodo (1). El nodo (y) es el resultado de
+multiplicar el peso (w) por un set de variables independientes (x), a eso se le sumó un bias. Luego a ese
 resultado se le aplicó la función de activación (f).
 \begin{equation}
     Y = f (wX+ b)
 \end{equation}
-Al principio se usaron valores random de w y b y se procedió a repetir el procedimiento para minimizar los 
-errores de predicción de los valores de inputs  outputs ya conocidos. Se repitió esto hasta reducir el error 
+Al principio se usaron valores random de w y b y se procedió a repetir el procedimiento para minimizar los
+errores de predicción de los valores de inputs  outputs ya conocidos. Se repitió esto hasta reducir el error
 a un valor aceptable (p<0,05)\\
 Luego se procedió a mejorar el modelo agregándole más capas (nº de capas)y nodos (nº de nodos).\\
 
 \subsection{Análisis estadístico}
-Cuando se completó el entrenamiento del modelo se procedió a realizar el análisis estadístico mediante una 
+Cuando se completó el entrenamiento del modelo se procedió a realizar el análisis estadístico mediante una
 prueba t de Student para comparar la diferencia entre el total de imágenes y el total de aciertos del modelo.
